@@ -24,7 +24,10 @@ class staff {
 
       );
 
-
+  staff.ASD(
+    this.id,
+      this.name
+      );
 
   staff.fromJson(Map<String, dynamic> json)
       : id = json['id'] as dynamic,

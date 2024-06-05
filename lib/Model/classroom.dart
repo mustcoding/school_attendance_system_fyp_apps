@@ -15,6 +15,11 @@ class classroom {
       this.is_Delete,
       );
 
+  classroom.ASD(
+      this.name,
+      this.form_number
+      );
+
   classroom.fromJson(Map<String, dynamic> json)
       : id = json['id'] as dynamic,
         name = json['name'] as String,

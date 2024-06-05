@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:school_attendance_system_fyp/view/applyLeave.dart';
-import 'package:school_attendance_system_fyp/view/startPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../controller/request_controller.dart';
+import 'package:school_attendance_system_fyp/view/studentLeave.dart';
+import 'package:school_attendance_system_fyp/view/attendanceMonitoring.dart';
 import '../model/parentGuardian.dart';
 
 class HomePage extends StatefulWidget {
@@ -292,7 +291,10 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                //_alertMessage("EMAIL OR PASSWORD WRONG!");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => StudentLeave()), // Instantiate StartPage
+                                );
                               },
                               child: Container(
                                 width: 130,
@@ -326,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                               onTap:(){
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => ApplyLeave()), // Instantiate StartPage
+                                  MaterialPageRoute(builder: (context) => attendanceMonitoring()), // Instantiate StartPage
                                 );
                               },
                               child: Container(

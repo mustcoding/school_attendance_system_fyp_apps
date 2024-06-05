@@ -18,6 +18,10 @@ class attendanceTimetable {
       this.is_Delete,
       );
 
+  attendanceTimetable.nama (
+      this.name,
+      );
+
   attendanceTimetable.fromJson(Map<String, dynamic> json)
       : id = json['id'] as dynamic,
         name = json['name'] as String,

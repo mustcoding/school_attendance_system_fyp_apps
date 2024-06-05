@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:school_attendance_system_fyp/view/startPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../controller/request_controller.dart';
 import '../model/parentGuardian.dart';
 import 'homePage.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
+import '../model/student.dart';
+import '../model/absentSupportingDocument.dart';
 
 class ApplyLeave extends StatefulWidget {
   const ApplyLeave({super.key});
@@ -18,7 +19,21 @@ class ApplyLeave extends StatefulWidget {
 }
 
 class _ApplyLeaveState extends State<ApplyLeave> {
+
+  final List<Student> children = [];
   late final parentGuardian parent;
+  String base64String="";
+  String compressData="";
+  String fileName="";
+  String uploadDate="";
+  int? parent_id = 0;
+  int year =0;
+  int? selectedTeacher_id = 0;
+
+  Student? selectedStudent;
+
+
+
   TextEditingController nameController = TextEditingController();
   TextEditingController classNameController = TextEditingController();
   TextEditingController teacherController = TextEditingController();
@@ -27,11 +42,31 @@ class _ApplyLeaveState extends State<ApplyLeave> {
   TextEditingController reasonController = TextEditingController();
   TextEditingController supportingDocumentController = TextEditingController();
 
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+
+
+      final prefs = await SharedPreferences.getInstance();
+      parent_id = prefs.getInt('id') as int?;
+      print("Parent ID: ${parent_id}");
+
+      Student child = Student.findChild(parent_id);
+      children.addAll(await child.loadChildren(parent_id));
+
+      print("children : ${children[0].name}");
+      print("teacher : ${children[0].teacher!.name}");
+      print("teacher ID: ${children[0].teacher!.id}");
+      print("Kelas : ${children[0].kelas!.form_number} ${children[0].kelas!.name}");
+    });
+  }
+
   Future<Map<String?, dynamic?>> _getNameFromSharedPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     String? name = prefs.getString('nickname') as String?;
     int? parentGuardianId = prefs.getInt('id') as int?;
     return {'nickname': name, 'parent_guardian_id': parentGuardianId};
+
   }
 
   Future<int> getChildrenCount(int parentGuardianId) async {
@@ -87,24 +122,29 @@ class _ApplyLeaveState extends State<ApplyLeave> {
       allowedExtensions: ['pdf'],
     );
     if (result != null) {
-      // User picked a file
       PlatformFile pickedFile = result.files.single;
       String filePath = result.files.single.path!;
       File file = File(filePath);
-      String fileName = pickedFile.name;
+      fileName = pickedFile.name;
 
       // Read the file bytes
-      List<int> fileBytes = await file.readAsBytes();
 
-      // Encode the file bytes as base64
-      String base64String = base64Encode(fileBytes);
+      Uint8List fileBytes = await file.readAsBytes();
 
-      print("base file: $base64String");
-      print("File Name: $fileName");
-      // Update the supportingDocumentController with the base64 encoded string
+       print("SDDFFD: ${fileBytes}");
+
+      // Store the raw binary data
+      base64String = base64Encode(fileBytes);
+
+      // compressData = compressString(base64String);
+      // compressData = compressString(compressData);
+
+
+      print("AFTER COMPRESSED : ${compressData}");
+
       supportingDocumentController.text = fileName;
     } else {
-      // User canceled the picker, you can choose to show a message or perform any other action here
+      // User canceled the picker
     }
   }
 
@@ -118,18 +158,46 @@ class _ApplyLeaveState extends State<ApplyLeave> {
     }
   }
 
-  void _checkAdmin() async {
-    final String username = nameController.text.trim();
-    final String password = classNameController.text.trim();
+  // Compress base64 string
+  String compressString(String input) {
+    List<int> inputBytes = base64Decode(input);
+    List<int> compressedBytes = zlib.encode(inputBytes);
+    return base64Encode(compressedBytes);
+  }
 
-    if (username.isNotEmpty) {
-      parentGuardian parent = parentGuardian.login(username, password);
+// Decompress base64 string
+  String decompressString(String input) {
+    List<int> compressedBytes = base64Decode(input);
+    List<int> decompressedBytes = zlib.decode(compressedBytes);
+    return base64Encode(decompressedBytes);
+  }
 
-      if (await parent.checkParentExistence()) {
+  void _submit() async {
+    final String className = classNameController.text.trim();
+    final String teacher = teacherController.text.trim();
+    final String startDate = startDateController.text.trim();
+    final String endDate = endDateController.text.trim();
+    final String reasons = reasonController.text.trim();
+    final String fileName = supportingDocumentController.text.trim();
+
+   // parent_id
+    //base64String
+    DateTime dateRedeem = DateTime.now();
+    uploadDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateRedeem);
+    String verification_status = "PENDING";
+    String verified_date_time = uploadDate;
+    int is_Delete = 0;
+
+    if (fileName.isNotEmpty) {
+      absentSupportingDocument leave = absentSupportingDocument.add(fileName,
+          base64String, uploadDate, verification_status, verified_date_time, reasons,
+      parent_id, selectedTeacher_id, is_Delete, startDate, endDate);
+
+      if (await leave.applyLeave()) {
         setState(() {
           nameController.clear();
         });
-        _showMessage("LogIn Successful");
+        _showMessage("Leaves Successfully Being Applied");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => HomePage()), // Instantiate StartPage
@@ -144,6 +212,27 @@ class _ApplyLeaveState extends State<ApplyLeave> {
       });
     }
   }
+
+  // Define _getChildren method
+  Future<List<Student>> _getChildren() async {
+    await Future.delayed(Duration(seconds: 1)); // Simulate loading delay
+    return children;
+  }
+
+  void _onStudentSelected(Student? student) {
+    if (student != null) {
+      setState(() {
+        selectedStudent = student;
+        final formNumber = student.kelas!.form_number ?? 0;
+        final className = formNumber.toString() + ' ' + (student.kelas!.name ?? '');
+        classNameController.text = className;
+        teacherController.text = student.teacher!.name ?? '';
+        selectedTeacher_id = student.teacher!.id ?? 0;
+        print("Selected Teacher Id : ${selectedTeacher_id}");
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -244,6 +333,14 @@ class _ApplyLeaveState extends State<ApplyLeave> {
         child: Stack(
           children: [
             Positioned(
+              right: -19,
+              top: 85,
+              child: CustomPaint(
+                size: const Size(110, 110),
+                painter: CirclePainter(Colors.blue.shade100),
+              ),
+            ),
+            Positioned(
               left: -15,
               bottom: 100,
               child: CustomPaint(
@@ -265,7 +362,7 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                 children: [
                   const SizedBox(height: 20),
                   Text(
-                    'Children Leave Form',
+                    'Student Leave Form',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 25,
@@ -287,20 +384,27 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                         ),
                         const SizedBox(height: 1.0),
                         Center(
-                          child: Container(
-                            width: 300,
-                            height:60,
-                            padding: const EdgeInsets.all(6.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
-                            child: TextField(
-                              controller: nameController,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                              ),
-                            ),
+                          child: FutureBuilder<List<Student>>(
+                            future: _getChildren(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return DropdownButton<Student>(
+                                  value: selectedStudent,
+                                  hint: Text('Select Student'),
+                                  onChanged: _onStudentSelected,
+                                  items: snapshot.data!.map((student) {
+                                    return DropdownMenuItem<Student>(
+                                      value: student,
+                                      child: Text(student.name ?? ''),
+                                    );
+                                  }).toList(),
+                                );
+                              }
+                            },
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -322,6 +426,7 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                             ),
                             child: TextField(
                               controller: classNameController,
+                              readOnly:true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -347,6 +452,7 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                             ),
                             child: TextField(
                               controller: teacherController,
+                              readOnly: true,
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
                               ),
@@ -512,11 +618,11 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                   ),
                   const SizedBox(height: 15),
                   ElevatedButton(
-                    onPressed: _checkAdmin,
+                    onPressed: _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlue.shade800,
                     ),
-                    child: const Text('Sign In',
+                    child: const Text('Submit Leave',
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.bold,
