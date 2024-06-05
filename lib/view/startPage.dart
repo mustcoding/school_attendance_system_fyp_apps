@@ -154,9 +154,10 @@ class _LoginScreenState extends State<startPage> {
                       ],
                     ),
                   ),
+
                   // Loading buffer at the bottom
                   const Positioned.fill(
-                    bottom: 150,
+                    bottom: 90,
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: CircularProgressIndicator(),
