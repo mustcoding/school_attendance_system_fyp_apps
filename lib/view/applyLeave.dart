@@ -124,6 +124,7 @@ class _ApplyLeaveState extends State<ApplyLeave> {
     if (result != null) {
       PlatformFile pickedFile = result.files.single;
       String filePath = result.files.single.path!;
+      print("PATHFILE : $filePath");
       File file = File(filePath);
       fileName = pickedFile.name;
 
