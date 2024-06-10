@@ -238,12 +238,13 @@ class _ListExcuseState extends State<ListExcuse> {
                             ),
                           ],
                           rows: present.map((attendance) {
+                            int index = present.indexOf(attendance) + 1;
                             return DataRow(cells: [
                               DataCell(
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 31.0, vertical: 31.0), // Adjust padding here
                                   child: Text(
-                                    (0+1).toString(),
+                                    index.toString(),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
