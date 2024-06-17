@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../Model/parentGuardian.dart';
 import 'homePage.dart';
@@ -23,6 +24,9 @@ class _SignInState extends State<SignIn> {
       parentGuardian parent = parentGuardian.login(username, password);
 
       if (await parent.checkParentExistence()) {
+
+        OneSignal.login(username);
+
         setState(() {
           usernameController.clear();
         });
