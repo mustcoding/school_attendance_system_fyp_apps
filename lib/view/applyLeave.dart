@@ -141,7 +141,7 @@ class _ApplyLeaveState extends State<ApplyLeave> {
       // compressData = compressString(compressData);
 
 
-      print("AFTER COMPRESSED : ${compressData}");
+     // print("AFTER COMPRESSED : ${compressData}");
 
       supportingDocumentController.text = fileName;
     } else {

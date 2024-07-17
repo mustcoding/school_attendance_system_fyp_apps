@@ -19,7 +19,7 @@ class _LoginScreenState extends State<startPage> {
       // Navigate to SignIn page after delay
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const SignIn()), // Replace SignInPage with your actual SignIn page
+        MaterialPageRoute(builder: (context) => SignIn()), // Replace SignInPage with your actual SignIn page
       );
     });
     return Scaffold(

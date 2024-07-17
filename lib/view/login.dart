@@ -5,7 +5,7 @@ import '../Model/parentGuardian.dart';
 import 'homePage.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+  SignIn({Key? key}) : super(key: key);
 
   @override
   _SignInState createState() => _SignInState();
@@ -15,6 +15,7 @@ class _SignInState extends State<SignIn> {
   late final parentGuardian parent;
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool obscurePassword = true; // To toggle password visibility
 
   void _checkAdmin() async {
     final String username = usernameController.text.trim();
@@ -24,7 +25,6 @@ class _SignInState extends State<SignIn> {
       parentGuardian parent = parentGuardian.login(username, password);
 
       if (await parent.checkParentExistence()) {
-
         OneSignal.login(username);
 
         setState(() {
@@ -33,7 +33,7 @@ class _SignInState extends State<SignIn> {
         _showMessage("LogIn Successful");
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()), // Instantiate StartPage
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } else {
         _alertMessage("EMAIL OR PASSWORD WRONG!");
@@ -51,14 +51,14 @@ class _SignInState extends State<SignIn> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Message"),
+          title: Text("Message"),
           content: Text(msg),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("OK"),
+              child: Text("OK"),
             ),
           ],
         );
@@ -81,7 +81,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 90,
-        title: const Center(
+        title: Center(
           child: Text(
             '',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),
@@ -106,8 +106,8 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 0),
-              decoration: const BoxDecoration(
+              margin: EdgeInsets.only(top: 0),
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
@@ -122,7 +122,7 @@ class _SignInState extends State<SignIn> {
                     left: -95,
                     bottom: -430,
                     child: CustomPaint(
-                      size: const Size(550, 550),
+                      size: Size(550, 550),
                       painter: CirclePainter(Colors.blue.shade100),
                     ),
                   ),
@@ -130,7 +130,7 @@ class _SignInState extends State<SignIn> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const SizedBox(height: 60),
+                        SizedBox(height: 60),
                         ClipOval(
                           child: Image.asset(
                             'assets/jawahir.png',
@@ -139,7 +139,7 @@ class _SignInState extends State<SignIn> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        SizedBox(height: 40),
                         SizedBox(
                           width: 500,
                           child: Padding(
@@ -148,13 +148,13 @@ class _SignInState extends State<SignIn> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   '     Username',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 5.0),
+                                SizedBox(height: 5.0),
                                 Center(
                                   child: Container(
                                     width: 330,
@@ -165,20 +165,20 @@ class _SignInState extends State<SignIn> {
                                     ),
                                     child: TextField(
                                       controller: usernameController,
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
                                         border: InputBorder.none,
                                       ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
-                                const Text(
+                                SizedBox(height: 10),
+                                Text(
                                   '     Password',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 5.0),
+                                SizedBox(height: 5.0),
                                 Center(
                                   child: Container(
                                     width: 330,
@@ -189,8 +189,17 @@ class _SignInState extends State<SignIn> {
                                     ),
                                     child: TextField(
                                       controller: passwordController,
-                                      decoration: const InputDecoration(
+                                      obscureText: obscurePassword, // Toggle based on obscurePassword boolean
+                                      decoration: InputDecoration(
                                         border: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              obscurePassword = !obscurePassword; // Toggle the obscure state
+                                            });
+                                          },
+                                          icon: Icon(obscurePassword ? Icons.visibility : Icons.visibility_off),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -199,19 +208,19 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         ElevatedButton(
                           onPressed: _checkAdmin,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.lightBlue.shade800,
                           ),
-                          child: const Text('Sign In',
+                          child: Text('Sign In',
                               style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white)),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                       ],
                     ),
                   ),

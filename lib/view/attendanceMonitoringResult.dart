@@ -21,6 +21,8 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  int study_session=0;
+
   Future<Map<String?, dynamic?>> _getNameFromSharedPrefs() async {
     final monitor = await SharedPreferences.getInstance();
     String? name = monitor.getString('childname') as String?;
@@ -48,13 +50,16 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
 
   Future<int> getTotalPresent() async {
     final monitor = await SharedPreferences.getInstance();
-    int? student_id = monitor.getInt('id');
+    int? student_id = monitor.getInt('student_id');
     print("Student ID: ${student_id}");
 
     Student parent = Student.findStudentStudySession(student_id!);
 
     int studentStudySession = await parent.getStudentStudySession(student_id);
     print("studentStudySession : ${studentStudySession}");
+    study_session=studentStudySession;
+    final study = await SharedPreferences.getInstance();
+    await study.setInt('study_session', study_session ?? 0);
 
     attendance present = attendance.calculate(studentStudySession);
     int totalPresent = await present.TotalPresent(studentStudySession);

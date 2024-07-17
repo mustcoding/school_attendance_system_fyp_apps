@@ -46,7 +46,7 @@ class _ListExcuseState extends State<ListExcuse> {
   // Method to load data
   Future<void> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
-    student_study_sesison_id = prefs.getInt('student_study_session_id') as int?;
+    student_study_sesison_id = prefs.getInt('study_session') as int?;
 
     attendance leave = attendance.find(student_study_sesison_id);
     final List<attendance> fetchedData = await leave.loadChildrenLeaves(student_study_sesison_id);
