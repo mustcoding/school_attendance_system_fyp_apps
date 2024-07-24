@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:school_attendance_system_fyp/view/absentWarning.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:school_attendance_system_fyp/view/studentLeave.dart';
 import 'package:school_attendance_system_fyp/view/attendanceMonitoring.dart';
@@ -286,79 +287,123 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         const SizedBox(height: 90),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Column(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => StudentLeave()), // Instantiate StartPage
-                                );
-                              },
-                              child: Container(
-                                width: 130,
-                                height: 130,
-                                decoration: BoxDecoration(
-                                  color: Colors.indigo.shade900,
-                                  borderRadius: BorderRadius.circular(15), // Adjust the value to change the roundness
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.assignment_outlined,
-                                      color: Colors.white,
-                                      size: 45,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => StudentLeave()), // Instantiate StartPage
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 130,
+                                    height: 130,
+                                    decoration: BoxDecoration(
+                                      color: Colors.indigo.shade900,
+                                      borderRadius: BorderRadius.circular(15), // Adjust the value to change the roundness
                                     ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      'Children Leave',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 50),
-                            GestureDetector(
-                              onTap:(){
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => attendanceMonitoring()), // Instantiate StartPage
-                                );
-                              },
-                              child: Container(
-                                width: 130,
-                                height: 130,
-                                decoration: BoxDecoration(
-                                  color: Colors.indigo.shade900,
-                                  borderRadius: BorderRadius.circular(15), // Adjust the value to change the roundness
-                                ),
-                                child:Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children:[
-                                      Icon(
-                                        Icons.computer_rounded,
-                                        color: Colors.white,
-                                        size: 45,
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        'Attendance Monitor',
-                                        style: TextStyle(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.assignment_outlined,
                                           color: Colors.white,
-                                          fontSize: 12,
+                                          size: 45,
                                         ),
-                                      ),
-
-                                    ]
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          'Children Leave',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(width: 50),
+                                GestureDetector(
+                                  onTap:(){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => attendanceMonitoring()), // Instantiate StartPage
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 130,
+                                    height: 130,
+                                    decoration: BoxDecoration(
+                                      color: Colors.indigo.shade900,
+                                      borderRadius: BorderRadius.circular(15), // Adjust the value to change the roundness
+                                    ),
+                                    child:Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children:[
+                                          Icon(
+                                            Icons.computer_rounded,
+                                            color: Colors.white,
+                                            size: 45,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            'Attendance Monitor',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+
+                                        ]
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                            SizedBox(height:30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => absentWarning()), // Instantiate StartPage
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 130,
+                                    height: 130,
+                                    decoration: BoxDecoration(
+                                      color: Colors.indigo.shade900,
+                                      borderRadius: BorderRadius.circular(15), // Adjust the value to change the roundness
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.warning,
+                                          color: Colors.white,
+                                          size: 45,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          'Absent Warning',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                         const SizedBox(height: 10),
