@@ -42,19 +42,20 @@ class warningAbsent{
 
     List<warningAbsent> status = [];
 
-    RequestController req =
-    RequestController(path: "/ParentGuardianApps/ListLeaves");
+    RequestController req = RequestController(path: "/attendanceWarning");
     req.setHeaders({
       'Authorization': 'Bearer $token',
       'Content-Type': 'application/json',
     });
-    req.setBody({'student_id':student_id , 'teacher_id':teacher_id});
+    req.setBody({'studentId': student_id, 'teacherId': teacher_id});
 
     await req.post();
     if (req.status() == 200 && req.result() != null) {
-      for (var item in req.result()) {
-        status.add(warningAbsent.fromJson(item));
+      var result = req.result();
+      var warnings = result['warnings'] as List<dynamic>; // Extract the list
 
+      for (var item in warnings) {
+        status.add(warningAbsent.fromJson({'student_id': student_id, 'teacher_id': teacher_id, 'date': '', 'typeWarning': item}));
       }
     }
     return status;

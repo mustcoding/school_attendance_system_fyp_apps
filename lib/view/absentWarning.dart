@@ -25,7 +25,7 @@ class absentWarning extends StatefulWidget {
 
 class _absentWarningState extends State<absentWarning> {
 
-  final List<Student> cuti = [];
+  final List<warningAbsent> cuti = [];
   late final parentGuardian parent;
   String base64String="";
   String compressData="";
@@ -92,7 +92,7 @@ class _absentWarningState extends State<absentWarning> {
 
     setState(() {
       cuti.clear(); // Clear existing data
-      //cuti.addAll(fetchedData); // Add fetched data
+      cuti.addAll(fetchedData); // Add fetched data
     });
   }
 
@@ -196,7 +196,7 @@ class _absentWarningState extends State<absentWarning> {
         child: Stack(
           children: [
             Positioned(
-              top: 0, // Adjusted positioning
+              top: 0,
               left: -50,
               right: -50,
               child: ClipPath(
@@ -216,7 +216,7 @@ class _absentWarningState extends State<absentWarning> {
                 ),
                 color: Colors.white,
               ),
-              width: double.infinity, // Cover entire width of the screen
+              width: double.infinity,
               height: double.infinity,
               child: Stack(
                 children: [
@@ -246,7 +246,7 @@ class _absentWarningState extends State<absentWarning> {
                   ),
                   Column(
                     children: [
-                      SizedBox(height:40),
+                      SizedBox(height: 40),
                       Text(
                         'Absent Warning',
                         style: TextStyle(
@@ -255,7 +255,7 @@ class _absentWarningState extends State<absentWarning> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height:20),
+                      SizedBox(height: 20),
                       const Text(
                         '    Student Name',
                         style: TextStyle(
@@ -287,103 +287,47 @@ class _absentWarningState extends State<absentWarning> {
                           },
                         ),
                       ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
+                      Expanded(
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center, // Center the table vertically
-                            children: [
-                              SizedBox(height:20),
-                              Center(
-                                child: DataTable(
-                                  border: TableBorder.all(color: Colors.black), // Add border styling to DataTable
-                                  dataRowHeight: 80,
-                                  columns: const <DataColumn>[
-                                    DataColumn(
-                                      label: Text(
-                                        'Student Name',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Reason',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Status',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Start Leave',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'End Leave',
-                                        style: TextStyle(fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                  rows: cuti.map((student) {
-                                    return DataRow(cells: [
-                                      DataCell(
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0), // Adjust padding here
-                                          child: Text(
-                                            student.name ?? '',
-                                            textAlign: TextAlign.center,
-                                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(height: 20),
+                                Center(
+                                  child: DataTable(
+                                    border: TableBorder.all(color: Colors.black),
+                                    dataRowHeight: 80,
+                                    columns: const <DataColumn>[
+                                      DataColumn(
+                                        label: Text(
+                                          'Warning',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
-                                      DataCell(
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0), // Adjust padding here
-                                          child: Text(
-                                            student.leaves!.reason ?? '',
-                                            textAlign: TextAlign.center,
+                                    ],
+                                    rows: cuti.map((warning) {
+                                      return DataRow(cells: [
+                                        DataCell(
+                                          Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+                                            child: Text(
+                                              warning.typeWarning ?? '',
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0), // Adjust padding here
-                                          child: Text(
-                                            student.leaves!.verification_status ?? '',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0), // Adjust padding here
-                                          child: Text(
-                                            student.leaves!.start_date_leave ?? '',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                      DataCell(
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 1.0), // Adjust padding here
-                                          child: Text(
-                                            student.leaves!.end_date_leave ?? '',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ]);
-                                  }).toList(),
+                                      ]);
+                                    }).toList(),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 80),
-                            ],
+                                const SizedBox(height: 80),
+                              ],
+                            ),
                           ),
                         ),
                       ),
