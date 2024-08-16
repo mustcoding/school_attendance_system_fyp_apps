@@ -9,7 +9,7 @@ class RequestController {
   final Map<String, String> _headers = {};
   dynamic _resultData;
 
-  RequestController({required this.path, this.server = "http://192.168.0.123:8000"});
+  RequestController({required this.path, this.server = "http://192.168.0.119:8000"});
 
   setBody(Map<String, dynamic> data) {
     _body.clear();

@@ -3,9 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/attendance.dart';
 import '../Model/student.dart';
 import '../model/parentGuardian.dart';
+import 'homePage.dart';
 import 'listAbsent.dart';
 import 'listExcuse.dart';
 import 'listPresent.dart';
+import 'login.dart';
 
 class attendanceMonitoringResult extends StatefulWidget {
   const attendanceMonitoringResult({super.key});
@@ -123,6 +125,12 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
         ),
         backgroundColor: Colors.indigo.shade900,
         automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage with your actual HomePage widget
+          );
+        }, icon: Icon(Icons.home, color: Colors.white),),
         actions: [
           FutureBuilder<Map<String?, dynamic?>>(
             future: _getNameFromSharedPrefs(),
@@ -144,10 +152,6 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
                             child: Text('Profile'),
                           ),
                           DropdownMenuItem(
-                            value: 'settings',
-                            child: Text('Settings'),
-                          ),
-                          DropdownMenuItem(
                             value: 'logout',
                             child: Text('Logout'),
                           ),
@@ -158,11 +162,11 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
                             case 'profile':
                             // Navigate to profile page
                               break;
-                            case 'settings':
-                            // Navigate to settings page
-                              break;
                             case 'logout':
-                            // Perform logout
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignIn()), // Replace SignIn with your actual SignIn page widget
+                              );
                               break;
                           }
                         },

@@ -1,19 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:school_attendance_system_fyp/view/startPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/warningAbsent.dart';
-import '../controller/request_controller.dart';
 import '../model/parentGuardian.dart';
 import 'homePage.dart';
-import 'package:intl/intl.dart';
-import 'package:file_picker/file_picker.dart';
 import '../model/student.dart';
-import '../model/absentSupportingDocument.dart';
-import 'package:school_attendance_system_fyp/view/applyLeave.dart';
+import 'login.dart';
 
 class absentWarning extends StatefulWidget {
   const absentWarning({super.key});
@@ -135,6 +126,12 @@ class _absentWarningState extends State<absentWarning> {
         ),
         backgroundColor: Colors.indigo.shade900,
         automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage with your actual HomePage widget
+          );
+        }, icon: Icon(Icons.home, color: Colors.white),),
         actions: [
           FutureBuilder<Map<String?, dynamic?>>(
             future: _getNameFromSharedPrefs(),
@@ -156,10 +153,6 @@ class _absentWarningState extends State<absentWarning> {
                             child: Text('Profile'),
                           ),
                           DropdownMenuItem(
-                            value: 'settings',
-                            child: Text('Settings'),
-                          ),
-                          DropdownMenuItem(
                             value: 'logout',
                             child: Text('Logout'),
                           ),
@@ -170,11 +163,11 @@ class _absentWarningState extends State<absentWarning> {
                             case 'profile':
                             // Navigate to profile page
                               break;
-                            case 'settings':
-                            // Navigate to settings page
-                              break;
                             case 'logout':
-                            // Perform logout
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignIn()), // Replace SignIn with your actual SignIn page widget
+                              );
                               break;
                           }
                         },

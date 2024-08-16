@@ -3,6 +3,8 @@ import 'package:school_attendance_system_fyp/view/attendanceMonitoringResult.dar
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/parentGuardian.dart';
 import '../model/student.dart';
+import 'homePage.dart';
+import 'login.dart';
 
 
 class attendanceMonitoring extends StatefulWidget {
@@ -90,6 +92,12 @@ class _AttendanceMonitoringState extends State<attendanceMonitoring> {
         ),
         backgroundColor: Colors.indigo.shade900,
         automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage with your actual HomePage widget
+          );
+        }, icon: Icon(Icons.home, color: Colors.white),),
         actions: [
           FutureBuilder<Map<String?, dynamic?>>(
             future: _getNameFromSharedPrefs(),
@@ -111,10 +119,6 @@ class _AttendanceMonitoringState extends State<attendanceMonitoring> {
                             child: Text('Profile'),
                           ),
                           DropdownMenuItem(
-                            value: 'settings',
-                            child: Text('Settings'),
-                          ),
-                          DropdownMenuItem(
                             value: 'logout',
                             child: Text('Logout'),
                           ),
@@ -125,11 +129,11 @@ class _AttendanceMonitoringState extends State<attendanceMonitoring> {
                             case 'profile':
                             // Navigate to profile page
                               break;
-                            case 'settings':
-                            // Navigate to settings page
-                              break;
                             case 'logout':
-                            // Perform logout
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignIn()), // Replace SignIn with your actual SignIn page widget
+                              );
                               break;
                           }
                         },

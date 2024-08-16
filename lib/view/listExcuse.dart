@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/attendance.dart';
 import '../model/parentGuardian.dart';
+import 'homePage.dart';
+import 'login.dart';
 
 
 class ListExcuse extends StatefulWidget {
@@ -57,7 +59,6 @@ class _ListExcuseState extends State<ListExcuse> {
     });
   }
 
-
   Future<Map<String?, dynamic?>> _getNameFromSharedPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     String? name = prefs.getString('nickname') as String?;
@@ -65,42 +66,6 @@ class _ListExcuseState extends State<ListExcuse> {
     return {'nickname': name, 'parent_guardian_id': parentGuardianId};
 
   }
-
-
-
-  void _alertMessage(String msg) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Message"),
-          content: Text(msg),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-
-
-  void _showMessage(String msg) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-        ),
-      );
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +80,12 @@ class _ListExcuseState extends State<ListExcuse> {
         ),
         backgroundColor: Colors.indigo.shade900,
         automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage with your actual HomePage widget
+          );
+        }, icon: Icon(Icons.home, color: Colors.white),),
         actions: [
           FutureBuilder<Map<String?, dynamic?>>(
             future: _getNameFromSharedPrefs(),
@@ -136,10 +107,6 @@ class _ListExcuseState extends State<ListExcuse> {
                             child: Text('Profile'),
                           ),
                           DropdownMenuItem(
-                            value: 'settings',
-                            child: Text('Settings'),
-                          ),
-                          DropdownMenuItem(
                             value: 'logout',
                             child: Text('Logout'),
                           ),
@@ -150,11 +117,11 @@ class _ListExcuseState extends State<ListExcuse> {
                             case 'profile':
                             // Navigate to profile page
                               break;
-                            case 'settings':
-                            // Navigate to settings page
-                              break;
                             case 'logout':
-                            // Perform logout
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignIn()), // Replace SignIn with your actual SignIn page widget
+                              );
                               break;
                           }
                         },

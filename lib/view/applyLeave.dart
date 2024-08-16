@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../model/parentGuardian.dart';
@@ -10,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import '../model/student.dart';
 import '../model/absentSupportingDocument.dart';
+import 'login.dart';
 
 class ApplyLeave extends StatefulWidget {
   const ApplyLeave({super.key});
@@ -136,14 +136,8 @@ class _ApplyLeaveState extends State<ApplyLeave> {
 
       // Store the raw binary data
       base64String = base64Encode(fileBytes);
-
-      // compressData = compressString(base64String);
-      // compressData = compressString(compressData);
-
-
-     // print("AFTER COMPRESSED : ${compressData}");
-
       supportingDocumentController.text = fileName;
+
     } else {
       // User canceled the picker
     }
@@ -181,8 +175,6 @@ class _ApplyLeaveState extends State<ApplyLeave> {
     final String reasons = reasonController.text.trim();
     final String fileName = supportingDocumentController.text.trim();
 
-   // parent_id
-    //base64String
     DateTime dateRedeem = DateTime.now();
     uploadDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateRedeem);
     String verification_status = "PENDING";
@@ -248,6 +240,12 @@ class _ApplyLeaveState extends State<ApplyLeave> {
         ),
         backgroundColor: Colors.indigo.shade900,
         automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage with your actual HomePage widget
+          );
+        }, icon: Icon(Icons.home, color: Colors.white),),
         actions: [
           FutureBuilder<Map<String?, dynamic?>>(
             future: _getNameFromSharedPrefs(),
@@ -269,10 +267,6 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                             child: Text('Profile'),
                           ),
                           DropdownMenuItem(
-                            value: 'settings',
-                            child: Text('Settings'),
-                          ),
-                          DropdownMenuItem(
                             value: 'logout',
                             child: Text('Logout'),
                           ),
@@ -283,11 +277,11 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                             case 'profile':
                             // Navigate to profile page
                               break;
-                            case 'settings':
-                            // Navigate to settings page
-                              break;
                             case 'logout':
-                            // Perform logout
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignIn()), // Replace SignIn with your actual SignIn page widget
+                              );
                               break;
                           }
                         },

@@ -1,18 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:school_attendance_system_fyp/view/startPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../controller/request_controller.dart';
 import '../model/parentGuardian.dart';
 import 'homePage.dart';
-import 'package:intl/intl.dart';
-import 'package:file_picker/file_picker.dart';
 import '../model/student.dart';
-import '../model/absentSupportingDocument.dart';
 import 'package:school_attendance_system_fyp/view/applyLeave.dart';
+import 'login.dart';
 
 class StudentLeave extends StatefulWidget {
   const StudentLeave({super.key});
@@ -32,7 +24,6 @@ class _StudentLeaveState extends State<StudentLeave> {
   int? parent_id = 0;
   int year =0;
   int? selectedTeacher_id = 0;
-
   Student? selectedStudent;
 
 
@@ -78,42 +69,6 @@ class _StudentLeaveState extends State<StudentLeave> {
 
   }
 
-
-
-  void _alertMessage(String msg) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Message"),
-          content: Text(msg),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-
-
-  void _showMessage(String msg) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-        ),
-      );
-    }
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,6 +82,12 @@ class _StudentLeaveState extends State<StudentLeave> {
         ),
         backgroundColor: Colors.indigo.shade900,
         automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage with your actual HomePage widget
+          );
+        }, icon: Icon(Icons.home, color: Colors.white),),
         actions: [
           FutureBuilder<Map<String?, dynamic?>>(
             future: _getNameFromSharedPrefs(),
@@ -148,10 +109,6 @@ class _StudentLeaveState extends State<StudentLeave> {
                             child: Text('Profile'),
                           ),
                           DropdownMenuItem(
-                            value: 'settings',
-                            child: Text('Settings'),
-                          ),
-                          DropdownMenuItem(
                             value: 'logout',
                             child: Text('Logout'),
                           ),
@@ -162,11 +119,12 @@ class _StudentLeaveState extends State<StudentLeave> {
                             case 'profile':
                             // Navigate to profile page
                               break;
-                            case 'settings':
-                            // Navigate to settings page
-                              break;
                             case 'logout':
                             // Perform logout
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignIn()), // Replace SignIn with your actual SignIn page widget
+                              );
                               break;
                           }
                         },
