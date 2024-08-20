@@ -229,7 +229,7 @@ class _AttendanceMonitoringState extends State<attendanceMonitoring> {
                             const SizedBox(height: 5.0),
                             Center(
                               child: Container(
-                                width: 330,
+                                width: 350,
                                 padding: const EdgeInsets.all(8.0),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.grey),
@@ -242,17 +242,21 @@ class _AttendanceMonitoringState extends State<attendanceMonitoring> {
                                       setState(() {
                                         selectedStudent = newValue;
                                         student_id = newValue!.id ?? 0;
-                                        classroom = newValue!.kelas!.form_number!.toString() + " "+newValue!.kelas!.name!;
-                                        name = newValue!.name ?? '';
-                                        print ("DIA PUNYA CLASS : ${classroom}");
+                                        classroom = newValue.kelas!.form_number!.toString() + " " + newValue.kelas!.name!;
+                                        name = newValue.name ?? '';
+                                        print("DIA PUNYA CLASS : ${classroom}");
                                         print("Student ID Chosen: ${student_id}");
                                       });
                                     },
                                     items: children.map<DropdownMenuItem<Student>>((children) {
                                       return DropdownMenuItem<Student>(
                                         value: children,
-                                        child: Text(children.name??''),
-
+                                        child: Expanded(
+                                          child: Text(
+                                            children.name ?? '',
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
                                       );
                                     }).toList(),
                                     hint: Text(

@@ -387,16 +387,24 @@ class _ApplyLeaveState extends State<ApplyLeave> {
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else {
-                                return DropdownButton<Student>(
-                                  value: selectedStudent,
-                                  hint: Text('Select Student'),
-                                  onChanged: _onStudentSelected,
-                                  items: snapshot.data!.map((student) {
-                                    return DropdownMenuItem<Student>(
-                                      value: student,
-                                      child: Text(student.name ?? ''),
-                                    );
-                                  }).toList(),
+                                return Container(
+                                  width: 300, // Set a fixed width
+                                  child: DropdownButton<Student>(
+                                    value: selectedStudent,
+                                    hint: Text('Select Student'),
+                                    onChanged: _onStudentSelected,
+                                    isExpanded: true, // Expands the dropdown to fill the width
+                                    items: snapshot.data!.map((student) {
+                                      return DropdownMenuItem<Student>(
+                                        value: student,
+                                        child: Text(
+                                          student.name ?? '',
+                                          overflow: TextOverflow.ellipsis, // Truncate text with ellipsis
+                                          softWrap: false, // Prevent text from wrapping
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
                                 );
                               }
                             },

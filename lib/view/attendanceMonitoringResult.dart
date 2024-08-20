@@ -272,7 +272,7 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
                                                 Icon(
                                                   Icons.person_3_rounded,
                                                   color: Colors.white,
-                                                  size: 45,
+                                                  size: 30,
                                                 ),
                                               ],
                                             ),
@@ -283,14 +283,16 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
                                                   name ?? '', // Use a default value if nickname is null
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 18,
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.bold
                                                   ),
                                                 ),
                                                 Text(
                                                   className ?? '',
                                                   style: TextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 18,
+                                                    fontSize: 13,
+                                                      fontWeight: FontWeight.bold
                                                   ),
                                                 ),
                                               ],
