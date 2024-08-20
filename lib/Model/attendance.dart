@@ -187,6 +187,7 @@ class attendance {
 
   Future<List<attendance>> loadChildrenAbsent(int? student_study_session_id) async {
     print("DSSDFGFDSDFGFDS");
+    print("ufiuif : " + student_study_session_id.toString());
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
 

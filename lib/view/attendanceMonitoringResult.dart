@@ -70,8 +70,11 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
   }
 
   Future<int> getTotalAbsent() async {
+
+    print(" Calculate Total Absent ");
+
     final monitor = await SharedPreferences.getInstance();
-    int? student_id = monitor.getInt('id');
+    int? student_id = monitor.getInt('student_id');
     print("Student ID: ${student_id}");
 
     Student parent = Student.findStudentStudySession(student_id!);
@@ -79,30 +82,31 @@ class _attendanceMonitoringResultState extends State<attendanceMonitoringResult>
     int studentStudySession = await parent.getStudentStudySession(student_id);
     print("studentStudySession : ${studentStudySession}");
 
-    attendance present = attendance.calculate(studentStudySession);
-    int totalPresent = await present.TotalAbsent(studentStudySession);
-    print("total present : ${totalPresent}");
-    return totalPresent;
+    attendance absent = attendance.calculate(studentStudySession);
+    int totalAbsent = await absent.TotalAbsent(studentStudySession);
+    print("total absent : ${totalAbsent}");
+    return totalAbsent;
     return 0;
   }
 
   Future<int> getTotalLeave() async {
     final monitor = await SharedPreferences.getInstance();
-    int? student_id = monitor.getInt('id');
+    int? student_id = monitor.getInt('student_id');
     print("Student ID: ${student_id}");
 
     Student parent = Student.findStudentStudySession(student_id!);
 
     int studentStudySession = await parent.getStudentStudySession(student_id);
     print("studentStudySession : ${studentStudySession}");
+    print("hello : ${studentStudySession}");
 
     final studentStudySessionId = await SharedPreferences.getInstance();
     await studentStudySessionId.setInt('student_study_session_id', studentStudySession ?? 0);
 
     attendance present = attendance.calculate(studentStudySession);
-    int totalPresent = await present.TotalLeave(studentStudySession);
-    print("total present : ${totalPresent}");
-    return totalPresent;
+    int totalLeave = await present.TotalLeave(studentStudySession);
+    print("total leave : ${totalLeave}");
+    return totalLeave;
   }
 
   Future<int> getTotalSchoolDay() async {
